@@ -1,0 +1,35 @@
+version: "3"
+services:
+  mysql-user:
+    container_name: "mysql-user"
+    image: mysql
+    hostname: localhost
+    ports:
+     - 3306:3306
+    environment:
+     - MYSQL_ROOT_PASSWORD=Root@123
+     - MYSQLDB_USER=root
+     - MYSQL_DATABASE=auth2
+     - MYSQL_PASSWORD=Root@123
+  rabbitmq-container:
+      image: rabbitmq:3-management
+      ports:
+        - 5672:5672
+        - 15672:15672
+  mongo_db:
+    image: mongo:latest
+   # restart: always
+    #hostname: localhost
+    ports:
+       - 27017:27017
+  adminservice:
+    build: .
+    container_name: admin-service
+    network_mode: host
+    hostname: localhost
+    restart: always
+    depends_on:
+      - mysql-user
+      - rabbitmq-container
+    #ports:
+   #   - 9623:9623

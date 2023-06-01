@@ -1,0 +1,57 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8076/eureka
+    register-with-eureka: true
+    fetch-registry: true
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: "api-gateway"
+    main:
+      web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+        - id: registration-service
+          uri: http://localhost:8081/
+          predicates:
+            - Path=/registrationService/**
+
+        - id: search-service
+          uri: http://localhost:9988/
+          predicates:
+            - Path=/searchService/**
+
+        - id: notification-service
+          uri: http://localhost:8092/
+          predicates:
+            - Path=/notificationService/**
+
+        - id: seller-service
+          uri: http://localhost:8093/
+          predicates:
+            - Path=/sellerService/**
+
+        - id: user-service
+          uri: http://localhost:9090/
+          predicates:
+            - Path=/userService/**
+
+        - id: payment-service
+          uri: http://localhost:8082/
+          predicates:
+            - Path=/paymentService/**
+
+        - id: order-service
+          uri: http://localhost:8083/
+          predicates:
+            - Path=/orderService/**
+
+        - id: admin-service
+          uri: http://localhost:9623/
+          predicates:
+            - Path=/adminService/**

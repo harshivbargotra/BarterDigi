@@ -1,0 +1,25 @@
+version: "2"
+services:
+
+  seller-service:
+    build: .
+    container_name: sellerservice
+    restart: always
+    network_mode: "host"
+    hostname: localhost
+    ports:
+      - 8093:8093
+      
+  mongodb:
+    image: mongo:latest
+    container_name: "mongodb"
+    hostname: localhost
+    ports:
+      - 27017:27017
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672

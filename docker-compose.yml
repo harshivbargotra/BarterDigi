@@ -1,0 +1,119 @@
+ version: "3"
+ services:
+  eureka-server:
+    build: eureka-server/
+    container_name: eureka-server
+    restart: always
+    network_mode: "host"
+    hostname: localhost
+    ports:
+      - 8076:8076
+  api-gateway:
+    build: api-gateway/
+    container_name: api-gateway
+    depends_on:
+      - eureka-server
+    restart: always
+    network_mode: "host"
+    hostname: localhost
+    ports:
+      - 8086:8086
+
+  mysql-user:
+    container_name: "mysql-user"
+    image: mysql
+    hostname: localhost
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=Root@123
+      - MYSQLDB_USER=root
+      - MYSQL_DATABASE=test
+      - MYSQL_PASSWORD=Root@123
+  rabbitmq-container:
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+  mongo_db:
+    image: mongo:latest
+    # restart: always
+    #hostname: localhost
+    ports:
+      - 27017:27017
+  registrationtionservice:
+    build: UserRegistration
+    #    container_name: notification-service
+    network_mode: host
+    hostname: localhost
+    restart: always
+    depends_on:
+      - mysql-user
+      - rabbitmq-container
+      - mongo_db
+      #ports:
+      # - 8092:8092
+
+  adminservice:
+    build: adminservice
+    network_mode: host
+    hostname: localhost
+    restart: always
+    depends_on:
+      - mysql-user
+      - rabbitmq-container
+      - mongo_db
+  notificationservice:
+    build: notificationservice
+    network_mode: host
+    hostname: localhost
+    restart: always
+    depends_on:
+      - mysql-user
+      - rabbitmq-container
+      - mongo_db
+  orderservice:
+    build: orderservice
+    network_mode: host
+    hostname: localhost
+    restart: always
+    depends_on:
+      - mysql-user
+      - rabbitmq-container
+      - mongo_db
+  paymentservice:
+    build: PaymentService
+    network_mode: host
+    hostname: localhost
+    restart: always
+    depends_on:
+      - mysql-user
+      - rabbitmq-container
+      - mongo_db
+  searchservice:
+    build: searchservice
+    network_mode: host
+    hostname: localhost
+    restart: always
+    depends_on:
+      - mysql-user
+      - rabbitmq-container
+      - mongo_db
+  sellerservice:
+    build: sellerservice
+    network_mode: host
+    hostname: localhost
+    restart: always
+    depends_on:
+      - mysql-user
+      - rabbitmq-container
+      - mongo_db
+  userservice:
+    build: UserService
+    network_mode: host
+    hostname: localhost
+    restart: always
+    depends_on:
+      - mysql-user
+      - rabbitmq-container
+      - mongo_db

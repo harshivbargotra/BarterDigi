@@ -1,0 +1,28 @@
+version: "3.4"
+services:
+   rabbitmq-container:
+      image: rabbitmq:3-management
+      ports:
+        - 5672:5672
+        - 15672:15672
+     
+   search-service:
+      build: .
+      restart: always
+      network_mode: host
+      hostname: localhost
+     # ports:
+     # - 9988:9988
+      depends_on:
+      - rabbitmq-container
+      - mongo_db
+   
+   mongo_db:
+    image: mongo:latest
+   # restart: always
+    #hostname: localhost
+    ports:
+       - 27017:27017
+
+
+ 
